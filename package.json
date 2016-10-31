@@ -1,0 +1,27 @@
+{
+  "name": "postcss-remove-unused",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quarterto/postcss-remove-unused.git"
+  },
+  "keywords": [],
+  "author": "Matt Brennan <matt@153.io> (http://blog.153.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/quarterto/postcss-remove-unused/issues"
+  },
+  "homepage": "https://github.com/quarterto/postcss-remove-unused#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "postcss": "^5.2.5"
+  },
+  "devDependencies": {
+    "xo": "^0.17.0"
+  }
+}
