@@ -19,11 +19,13 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 				if (preserve) {
 					return;
 				}
+
 				if (node.parent.name === 'keyframes') {
 					return;
 				}
+
 				if (node.selector && !node.selector.match(/:(?:not)/)) {
-					const selector = node.selector.replace(/::?\w+/g, '');
+					const selector = node.selector.replace(/::?[\w-]+/g, '');
 					if (maybe(() => $(selector).length === 0)) {
 						node.remove();
 					}
