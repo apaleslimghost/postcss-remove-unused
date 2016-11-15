@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "xo --fix ; mocha -u exports"
+    "test": "xo --fix && mocha -u exports"
   },
   "repository": {
     "type": "git",
