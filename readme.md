@@ -1,4 +1,4 @@
-# postcss-remove-unused
+# postcss-remove-unused [![Build Status](https://travis-ci.org/quarterto/postcss-remove-unused.svg?branch=master)](https://travis-ci.org/quarterto/postcss-remove-unused)
 
 parse html and remove css rules that don't match
 
