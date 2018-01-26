@@ -9,7 +9,7 @@ const maybe = fn => {
 	}
 };
 
-module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags = {}}) => {
+module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags = {}, selectorFilter}) => {
 	const $ = cheerio.load(html);
 	let preserve = false;
 
@@ -25,7 +25,10 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 				}
 
 				if (node.selector && !node.selector.match(/:(?:not)/)) {
-					const selector = node.selector.replace(/::?[\w-]+/g, '');
+					let selector = node.selector.replace(/::?[\w-]+/g, '');
+					if (selectorFilter) {
+						selector = selectorFilter(selector);
+					}
 					if (maybe(() => $(selector).length === 0)) {
 						node.remove();
 					}
