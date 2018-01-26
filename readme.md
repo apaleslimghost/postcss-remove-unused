@@ -57,7 +57,7 @@ function renderCss(css, html, hasLazyLoad) {
 
 ### `selectorFilter`
 
-the `selectorFilter` option can be used to filter modifier classes, which may not be in the HTML when postcss is run, from selectors. in the example below, the `.tooltip.open .tooltip-tip` block would normally be discarded. but by filtering the `.open` modifier from it's selector, ensures it is kept.
+the `selectorFilter` option can be used to filter modifier classes, which may not be in the HTML when postcss is run, from selectors. in the example below, the `.tooltip.open .tooltip-tip` block would normally be discarded; but filtering the `.open` modifier from it's selector, ensures it is kept.
 
 ```css
 .tooltip .tooltip-tip {
