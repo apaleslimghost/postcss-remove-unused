@@ -154,5 +154,32 @@ module.exports = {
 /* pru:endPreserve(bar) */
 `);
 		}
+	},
+
+	selectorFilter: {
+		'should keep a selector that would otherwise not be kept'() {
+			expect(
+				process(`
+.foo {
+	color: blue;
+}
+
+.foo.bar {
+	color: red;
+}
+`,
+					'<div class="foo"></div>',
+					{selectorFilter: selector => selector.replace(/(\.foo)\.bar/g, '$1')}
+				)
+			).to.equal(`
+.foo {
+	color: blue;
+}
+
+.foo.bar {
+	color: red;
+}
+`);
+		}
 	}
 };

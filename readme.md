@@ -55,6 +55,31 @@ function renderCss(css, html, hasLazyLoad) {
 }
 ```
 
+### `selectorFilter`
+
+the `selectorFilter` option can be used to filter modifier classes, which may not be in the HTML when postcss is run, from selectors. in the example below, the `.tooltip.open .tooltip-tip` block would normally be discarded; but filtering the `.open` modifier from it's selector, ensures it is kept.
+
+```css
+.tooltip .tooltip-tip {
+	display: none;
+}
+.tooltip.open .tooltip-tip {
+	display: block;
+}
+```
+
+```js
+ require('postcss');
+const removeUnused = require('postcss-remove-unused');
+
+postcss([
+	removeUnused({
+		html: '<div class="tooltip><span class="tooltip-target">term</span><div class="tooltip-tip">Term definition</div></div>',
+		selectorFilter: selector => selector.replace(/(\.tooltip)\.open/g, '$1'),
+	})
+]).process(css);
+```
+
 ## prior art
 
 postcss-remove-unused is heavily inspired by [uncss](https://github.com/giakki/uncss). there's a few major differences:
