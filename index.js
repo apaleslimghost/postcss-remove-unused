@@ -12,7 +12,7 @@ const maybe = fn => {
 module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags = {}, selectorFilter}) => {
 	const $ = cheerio.load(html);
 	let preserve = false;
-	const PSEUDO_SELECTOR_RE = /([^:\\])::?[\w-]+(?:\(.*?\))?([,\s]|$)/g;
+	const PSEUDO_SELECTOR_RE = /([^:\\])(?:::?[\w-]+(?:\(.*?\))?)+/g;
 
 	return css => css.walk(node => {
 		switch (node.type) {
@@ -26,7 +26,7 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 				}
 
 				if (node.selector && !/(?:^|[,])\s*:not/.test(node.selector)) {
-					let selector = node.selector.replace(PSEUDO_SELECTOR_RE, '$1$2');
+					let selector = node.selector.replace(PSEUDO_SELECTOR_RE, '$1');
 					if (selectorFilter) {
 						selector = selectorFilter(selector);
 					}

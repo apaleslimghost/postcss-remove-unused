@@ -122,6 +122,25 @@ module.exports = {
 `);
 	},
 
+	'should test double pseudoelements based on their parent'() {
+		expect(
+			process(`
+.foo::hover::before {
+	color: blue;
+}
+.bar::hover::before {
+	color: red;
+}
+`,
+				'<div class="foo"></div>'
+			)
+		).to.equal(`
+.foo::hover::before {
+	color: blue;
+}
+`);
+	},
+
 	'should test pseudoclasses based on their parent'() {
 		expect(
 			process(`
