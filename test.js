@@ -43,18 +43,61 @@ module.exports = {
 `);
 	},
 
-	'should leave :not() intact'() {
+	'should leave unqualified :not() intact'() {
 		expect(
 			process(`
-.foo:not(.bar) {
-	color: red;
+:not(.bar) {
+	color: blue;
+}
+:not(.baz) {
+	color: green;
 }
 `,
 				'<div class="foo bar"></div>'
 			)
 		).to.equal(`
+:not(.bar) {
+	color: blue;
+}
+:not(.baz) {
+	color: green;
+}
+`);
+	},
+
+	'should test qualified :not() selectors, ignoring the :not()'() {
+		expect(
+			process(`
 .foo:not(.bar) {
+	color: blue;
+}
+.baz:not(.foo) {
 	color: red;
+}
+#bing .foo:not(.bar) {
+	color: green;
+}
+#bing .foo:not(.bar) a {
+	color: gray;
+}
+#bing .foo:not(.bar) span {
+	color: yellow;
+}
+.foo:not(.bar) a {
+	color: blue;
+}
+`,
+				'<div id="bing"><div class="foo bar"><span></span></div></div>'
+			)
+		).to.equal(`
+.foo:not(.bar) {
+	color: blue;
+}
+#bing .foo:not(.bar) {
+	color: green;
+}
+#bing .foo:not(.bar) span {
+	color: yellow;
 }
 `);
 	},
@@ -94,6 +137,50 @@ module.exports = {
 			)
 		).to.equal(`
 .foo:first-child {
+	color: blue;
+}
+`);
+	},
+
+	'should work with attribute selectors'() {
+		expect(
+			process(`
+[title] {
+	color: blue;
+}
+[name] {
+	color: red;
+}
+.foo[title] {
+	color: green;
+}
+`,
+				'<div class="foo" title="baz"></div>'
+			)
+		).to.equal(`
+[title] {
+	color: blue;
+}
+.foo[title] {
+	color: green;
+}
+`);
+	},
+
+	'should work with attribute selectors containing a ":"'() {
+		expect(
+			process(`
+[foo\\:bar] {
+	color: blue;
+}
+[foo\\:baz] {
+	color: red;
+}
+`,
+				'<div foo:bar></div>'
+			)
+		).to.equal(`
+[foo\\:bar] {
 	color: blue;
 }
 `);
