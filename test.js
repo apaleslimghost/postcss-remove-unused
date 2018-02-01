@@ -86,6 +86,9 @@ module.exports = {
 .foo:not(.bar) a {
 	color: blue;
 }
+.foo:not(.bar) a,.blarg:not(.bar) {
+	color: blue;
+}
 `,
 				'<div id="bing"><div class="foo bar"><span></span></div></div>'
 			)
@@ -111,6 +114,9 @@ module.exports = {
 
 .bar::before {
 	color: red;
+}
+.bar:nth-child(2n+1) {
+	color: gray;
 }
 `,
 				'<div class="foo"></div>'
