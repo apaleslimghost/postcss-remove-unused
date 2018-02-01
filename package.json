@@ -12,6 +12,9 @@
   },
   "keywords": [],
   "author": "Matt Brennan <matt@153.io> (http://blog.153.io/)",
+  "contributors": [
+    "Jonathan Felchlin <jonathan@xgecko.com> (https://github.com/greengremlin)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/quarterto/postcss-remove-unused/issues"
