@@ -12,16 +12,17 @@ const maybe = fn => {
 module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags = {}, selectorFilter}) => {
 	const $ = cheerio.load(html);
 	let preserve = false;
-	// Matches a standalone, or unqualified, `:not` selector.
+	// Matches for selectors that contain standalone `:not()` selectors.
 	//     **matches**
-	//         :not
-	//         .foo, :not
+	//         :not(.foo)
+	//         .foo(.foo), :not(.foo)
+	//         .bar, :not(.foo), .baz
 	//     **doesn't match**
-	//         .bar:not
-	//         .bar :not
-	//         :not .bar
-	const STANDALONE_NOT_SELECTOR_RE = /(?:^|,)\s*:not/;
-	// Matches pseudo-selectors, with a negative-look behind like capture group to prevent matching
+	//         .bar:not(.foo)
+	//         .bar :not(.foo)
+	//         :not(.foo) .bar
+	const STANDALONE_NOT_SELECTOR_RE = /(?:^|,)\s*:not\s*\(.*?\)\s*(?:$|,)/;
+	// Matches pseudo-selectors, with a negative-look behind **like** capture group to prevent matching
 	// escaped colons.
 	//     **matches**
 	//         :first-child:hover

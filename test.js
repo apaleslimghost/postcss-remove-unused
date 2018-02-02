@@ -89,6 +89,12 @@ module.exports = {
 .foo:not(.bar) a,.blarg:not(.bar) {
 	color: blue;
 }
+:not(.bar) .foo {
+	color: blue;
+}
+:not(.bar) a {
+	color: blue;
+}
 `,
 				'<div id="bing"><div class="foo bar"><span></span></div></div>'
 			)
@@ -101,6 +107,9 @@ module.exports = {
 }
 #bing .foo:not(.bar) span {
 	color: yellow;
+}
+:not(.bar) .foo {
+	color: blue;
 }
 `);
 	},
