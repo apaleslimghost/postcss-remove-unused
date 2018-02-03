@@ -12,6 +12,25 @@ const maybe = fn => {
 module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags = {}, selectorFilter}) => {
 	const $ = cheerio.load(html);
 	let preserve = false;
+	// Matches for selectors that contain standalone `:not()` selectors.
+	//     **matches**
+	//         :not(.foo)
+	//         .foo(.foo), :not(.foo)
+	//         .bar, :not(.foo), .baz
+	//     **doesn't match**
+	//         .bar:not(.foo)
+	//         .bar :not(.foo)
+	//         :not(.foo) .bar
+	const STANDALONE_NOT_SELECTOR_RE = /(?:^|,)\s*:not\s*\(.*?\)\s*(?:$|,)/;
+	// Matches pseudo-selectors, with a negative-look behind **like** capture group to prevent matching
+	// escaped colons.
+	//     **matches**
+	//         :first-child:hover
+	//         :nth-child(2n + 1)
+	//         :not('.foo')
+	//     **doesn't match**
+	//         [ng\:cloak]
+	const PSEUDO_SELECTOR_RE = /([^:\\])(?:::?[\w-]+(?:\(.*?\))?)+/g;
 
 	return css => css.walk(node => {
 		switch (node.type) {
@@ -24,8 +43,8 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 					return;
 				}
 
-				if (node.selector && !node.selector.match(/:(?:not)/)) {
-					let selector = node.selector.replace(/::?[\w-]+/g, '');
+				if (node.selector && !STANDALONE_NOT_SELECTOR_RE.test(node.selector)) {
+					let selector = node.selector.replace(PSEUDO_SELECTOR_RE, '$1');
 					if (selectorFilter) {
 						selector = selectorFilter(selector);
 					}
