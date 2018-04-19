@@ -44,7 +44,7 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 				}
 
 				if (node.selector) {
-					let usedSelectors = [];
+					const usedSelectors = [];
 					// iterate over each selector in a rule to see if it is used
 					node.selector.split(',').forEach(s => {
 						if (STANDALONE_NOT_SELECTOR_RE.test(s)) {
