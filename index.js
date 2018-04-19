@@ -54,7 +54,7 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 							if (selectorFilter) {
 								selector = selectorFilter(selector);
 							}
-							if (!maybe(() => $(selector).length === 0)) {
+							if (maybe(() => $(selector).length !== 0)) {
 								usedSelectors.push(s);
 							}
 						}
