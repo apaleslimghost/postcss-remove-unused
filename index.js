@@ -43,13 +43,27 @@ module.exports = postcss.plugin('postcss-remove-unused', ({html, preserveFlags =
 					return;
 				}
 
-				if (node.selector && !STANDALONE_NOT_SELECTOR_RE.test(node.selector)) {
-					let selector = node.selector.replace(PSEUDO_SELECTOR_RE, '$1');
-					if (selectorFilter) {
-						selector = selectorFilter(selector);
-					}
-					if (maybe(() => $(selector).length === 0)) {
+				if (node.selector) {
+					let usedSelectors = [];
+					// iterate over each selector in a rule to see if it is used
+					node.selector.split(',').forEach(s => {
+						if (STANDALONE_NOT_SELECTOR_RE.test(s)) {
+							usedSelectors.push(s);
+						} else {
+							let selector = s.replace(PSEUDO_SELECTOR_RE, '$1');
+							if (selectorFilter) {
+								selector = selectorFilter(selector);
+							}
+							if (!maybe(() => $(selector).length === 0)) {
+								usedSelectors.push(s);
+							}
+						}
+					});
+
+					if (usedSelectors.length === 0) {
 						node.remove();
+					} else {
+						node.selector = usedSelectors.join(',');
 					}
 				}
 
