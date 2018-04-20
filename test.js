@@ -27,6 +27,22 @@ module.exports = {
 `);
 	},
 
+	'should remove an unused selector from a rule'() {
+		expect(
+			process(`
+.foo, .bar {
+	color: blue;
+}
+`,
+				'<div class="foo"></div>'
+			)
+		).to.equal(`
+.foo {
+	color: blue;
+}
+`);
+	},
+
 	'should leave @keyframes intact'() {
 		expect(
 			process(`
